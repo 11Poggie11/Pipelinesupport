@@ -1,0 +1,27 @@
+name: push-on-green-deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to staging
+      run: |
+        docker-compose -f docker-compose.staging.yml up -d
+
+    - name: Run integration tests on staging
+      run: |
+        docker-compose -f docker-compose.staging.yml run --rm integration_tests
+
+    - name: Promote to production
+      if: success()
+      run: |
+        docker-compose -f docker-compose.prod.yml up -d
