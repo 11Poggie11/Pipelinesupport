@@ -1,0 +1,43 @@
+terraform {
+  required_providers {
+    docker = {
+      source = "kreuzwerker/docker"
+    }
+    postgresql = {
+      source = "cyrilgdn/postgresql"
+    }
+  }
+}
+
+resource "docker_image" "ubuntu" {
+  name = "ubuntu:latest"
+}
+
+resource "docker_container" "apache" {
+  name  = "my-apache-container-${count.index}"
+  count = local.containers
+  image = docker_image.ubuntu.name
+  ports {
+    internal = 22
+    external = 2222 + count.index
+  }
+  ports {
+    internal = 80
+    external = 9000 + count.index
+  }
+  volumes {
+  host_path      = "C:/Users/Patrick/OneDrive - Office 365 Fontys/Semester 3/Automation/Aut1/index.html"
+  container_path = "/var/www/html/index.html"
+  read_only      = false
+  }
+
+  # Hier voegen we de commando's toe om Apache te installeren en uit te voeren
+  command = ["/bin/bash", "-c", "apt-get update && apt-get install -y apache2 && apt-get install -y openssh-server && /usr/sbin/apache2ctl -D FOREGROUND && /usr/sbin/sshd -D"]
+  attach       = true
+  tty          = true
+  restart      = "always"
+  privileged   = true
+  working_dir  = "/"
+  network_mode = "bridge"
+}
+
