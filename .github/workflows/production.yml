@@ -30,7 +30,7 @@ jobs:
     steps:
     - name: Copy files to Docker container
       run: |
-        ssh -i ./opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
+        ssh -i C:\Users\Patrick\.ssh\opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
           rm -rf /var/www/html/*
           mkdir -p /var/www/html/
           cp -R /tmp/build/* /var/www/html/
