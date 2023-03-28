@@ -15,11 +15,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        npm install
-        npm run build
-
     - name: Archive build artifacts
       uses: actions/upload-artifact@v2
       with:
