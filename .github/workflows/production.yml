@@ -1,0 +1,42 @@
+name: Deploy to Docker Container
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup SSH connection
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: AAABAAVuwW3OBkr+BZWzgDfpoX9a8y+2N9vj5Rjehurj1FCzpwd4A8Rdrq3qeYmh
+aN7MtYptmAo/7VikZjDUKxrf4eOs5Qhw/g4+qVdYp1Mp7EHuemY6/fyKMHkpL4w+
+FJPbMhApVKUZOcZ8qXz99CA724nE3Pq/OdzrOap1tVM7qWKqETL2EvmAfX3GOwJ2
+9+MlU21JoDUqSwr+Vsa7s7NeUySneqrLTClzUnGEwtdMaG+/Y6bK/RGGHeKgHopZ
+zI78bM8FqhKQFp+LpAKkzyvK1uNhHK2GgZ3fZUgQFKaAFitNQCNsZjrdOJrfrbfj
+4tfOafBxfAvNR595vjYV3K8n5gEAAACBAOjRR7Ba5rKsHW0XNfnva8qe/eyXmy67
+g6zKrWXni6/OmJ78Cofcqg0eySFbMXn1jkRyLkTCpIE019Eizw5CV6YJRBS8ZbTO
+U0eO4hf3eCteycoWoaiA+JWDCS+Qw9S3Pm9tTn3R2EVoqFYGDokSt/zYG+/LaOOw
+O4lYtPwj2kE5AAAAgQCZZ9I+tWwNy25JVXPA9nscYubnV8+vU+P3h+J+OyaooISO
+wf7j2RDk/8A7yUyQYrFbgLC4smnC7aRjjedT36HWLN+9g1NM0yiyI4PNZysLgDd0
+XRvJbqrmGQORPuSnucMG+M2tPUClKfMSnew9fDBA0GYpAAMQsLf+dTDC+uyHWQAA
+AIEAv1Z2DrxzG+smcIDHLsuJwIFCoeDL0NWOJlW2Ki6Xj6ybU2JucygYpWXUniyb
+wP0daiNxRRwxX3iGmrC2pOU3mVTfJk7LAQmDTV1f6EPfzKlqIPvRwmu+VzY/YbIb
+BOp6o5JH9vjmTLdEfFGFPU0YEbI597qByBU4UfSg/ILFxws=
+
+    - name: Copy files to Docker container
+      run: |
+        ssh -i C:\Users\Patrick\.ssh\opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
+          rm -rf /var/www/html/*
+          mkdir -p /var/www/html/
+          git clone https://github.com/11Poggie11/test.git /tmp/test
+          cp -R /tmp/test/* /var/www/html/
+          rm -rf /tmp/test
+        EOF
