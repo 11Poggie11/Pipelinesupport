@@ -34,7 +34,7 @@ jobs:
     - name: Setup SSH connection
       uses: webfactory/ssh-agent@v0.5.0
       with:
-        ssh-private-key: C:\Users\Patrick\.ssh\opensshkey
+        ssh-private-key: ./opensshkey
 
     - name: Download build artifacts
       uses: actions/download-artifact@v2
@@ -44,7 +44,7 @@ jobs:
 
     - name: Copy files to Docker container
       run: |
-        ssh -i C:\Users\Patrick\.ssh\opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
+        ssh -i ./opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
           rm -rf /var/www/html/*
           mkdir -p /var/www/html/
           cp -R /tmp/build/* /var/www/html/
