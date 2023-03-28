@@ -28,20 +28,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup SSH connection
-      uses: webfactory/ssh-agent@v0.5.0
-      with:
-        ssh-private-key: ./opensshkey
-
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: build-artifacts
-        path: /tmp/build
-
     - name: Copy files to Docker container
       run: |
         ssh -i ./opensshkey -o StrictHostKeyChecking=no root@localhost -p 2222 << EOF
