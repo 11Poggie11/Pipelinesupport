@@ -29,7 +29,7 @@ jobs:
     - name: Deploy to remote server
       uses: appleboy/ssh-action@master
       with:
-        host: localhost
+        host: 145.93.98.73
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 2222
