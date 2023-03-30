@@ -1,4 +1,4 @@
-name: Pipeline Workflow
+name: Build & Deploy Workflow
 
 on:
   push:
@@ -6,14 +6,17 @@ on:
       - main
   workflow_dispatch:
 
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Build code
+      run: |
+        # Voer hier de opdrachten uit om de code te bouwen
 
     - name: Archive build artifacts
       uses: actions/upload-artifact@v2
@@ -23,15 +26,17 @@ jobs:
           dist/
           node_modules/
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Copy files to Docker container
-      run: |
-        ssh -tt -i ./opensshkey.key root@localhost -p 2222 << EOF
-          rm -rf /var/www/html/*
-          mkdir -p /var/www/html/
-          cp -R /tmp/build/* /var/www/html/
-        EOF
+    - name: Deploy to remote server
+      uses: appleboy/ssh-action@master
+      with:
+        host: example.com
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          # Voer hier de opdrachten uit om de code op de externe server te implementeren, bijv.:
+          rm -rf $tmp_dir
+          tmp_dir=$(mktemp -d)
+          git clone https://github.com/11Poggie11/test.git $tmp_dir
+          cp -R $tmp_dir/* /var/www/html/
+          rm -rf $tmp_dir
