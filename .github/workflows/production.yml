@@ -30,7 +30,7 @@ jobs:
     steps:
     - name: Copy files to Docker container
       run: |
-        ssh -tt -i ./opensshkey root@localhost -p 2222 << EOF
+        ssh -tt -i ./opensshkey.key root@localhost -p 2222 << EOF
           rm -rf /var/www/html/*
           mkdir -p /var/www/html/
           cp -R /tmp/build/* /var/www/html/
