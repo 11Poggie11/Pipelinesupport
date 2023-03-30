@@ -29,10 +29,10 @@ jobs:
     - name: Deploy to remote server
       uses: appleboy/ssh-action@master
       with:
-        host: example.com
+        host: localhost
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
+        port: 2222
         script: |
           # Voer hier de opdrachten uit om de code op de externe server te implementeren, bijv.:
           rm -rf $tmp_dir
